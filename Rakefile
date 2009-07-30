@@ -1,23 +1,17 @@
-require 'newgem'
-require 'lib/disqus/version'
+# require 'newgem'
+# require 'lib/disqus/version'
 
-$hoe = Hoe.new("disqus", Disqus::Version::STRING) do |p|
-  p.rubyforge_name = "disqus"
-  p.author = ['Norman Clarke', 'Matthew Van Horn']
-  p.email = ['norman@randomba.org', 'mattvanhorn@gmail.com']
-  p.summary = "Integrates Disqus commenting system into your Ruby-powered site."
-  p.description = 'Integrates Disqus into your Ruby-powered site. Works with any Ruby website, and has view helpers for Rails and Merb.'
-  p.url = 'http://disqus.rubyforge.org'
-  p.test_globs = ['test/**/*_test.rb']
-  p.extra_deps << ['json']
-  p.extra_dev_deps = [
-    ['newgem', ">= #{::Newgem::VERSION}"],
-    ['mocha']
-  ]
-  p.rsync_args = '-av --delete --ignore-errors'
-  changes = p.paragraphs_of('History.txt', 0..1).join("\n\n")
-  p.remote_rdoc_dir = ""
+begin
+  require 'jeweler'
+  Jeweler::Tasks.new do |gemspec|
+    gemspec.name = "acts_as_disqusable"
+    gemspec.summary = "Uses the Disqus API to make model(s) comment-on-able"
+    gemspec.description = "Uses the Disqus API to make model(s) comment-on-able"
+    gemspec.email = "mark@sitesteaders.com"
+    gemspec.homepage = "http://github.com/ideaoforder/disqus"
+    gemspec.description = "TODO"
+    gemspec.authors = ["Mark Dickson", "Norman Clarke", "Matthew Van Horn"]
+  end
+rescue LoadError
+  puts "Jeweler not available. Install it with: sudo gem install technicalpickles-jeweler -s http://gems.github.com"
 end
-
-require 'newgem/tasks'
-Dir['tasks/**/*.rake'].each { |t| load t }
