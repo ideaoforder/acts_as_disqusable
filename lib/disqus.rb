@@ -22,13 +22,32 @@ require 'disqus/thread'
 require 'disqus/post'
 
 module Disqus
-  def api_key=(new_key)
-    @api_key = new_key
-    [Author, Forum, Post, Thread].each do |klass|
-      klass.include HTTParty
-      klass.base_uri 'http://disqus.com/api'
-      klass.format :json
-      klass.default_params :user_api_key => @api_key
-    end
+  @defaults = {
+    :api_key => "",
+    :account => "",
+    :developer => false,
+    :container_id => 'disqus_thread',
+    :avatar_size => 48,
+    :color => "grey",
+    :default_tab => "popular",
+    :hide_avatars => false,
+    :hide_mods => true,
+    :num_items => 15,
+    :show_powered_by => true,
+    :orientation => "horizontal",
+    :forum_api_key => '', # optional--if you're just mapping one forum to your app, this is convenient
+    :forum_id => '' # ditto
+  }
+
+  def self.defaults
+    @config = @defaults.merge(YAML::load(File.open("#{RAILS_ROOT}/config/disqus.yml")))
+  end 
+# Author,
+  [Forum, Post, Thread].each do |klass|
+    klass.class_eval "include HTTParty"
+    klass.class_eval "base_uri 'http://disqus.com/api'"
+    klass.class_eval "format :json"
+    klass.class_eval "default_params :user_api_key => '#{self.defaults[:api_key]}'"
   end
+
 end

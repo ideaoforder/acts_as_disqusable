@@ -1,5 +1,6 @@
 module Disqus
   class Forum
+    
     attr_accessor :id, :shortname, :name, :created_at
     def initialize(data)
       data.each { |k, v| send(:"#{k}=", v) }
@@ -7,7 +8,7 @@ module Disqus
     
     def self.all
       @@all ||= begin
-        response = self.class.get('/get_forum_list')
+        response = get('/get_forum_list')
         response["succeeded"] ? response["message"].map { |data| Disqus::Forum.new(data) } : nil
       end
     end
@@ -62,7 +63,7 @@ module Disqus
     # * <tt>:url</tt> - the URL this thread is on, if known.
     # * <tt>:allow_comment</tt> - whether this thread is open to new comments
     def update_thread(thread_id, opts = {})
-      response = self.class.post('/update_thread', :query => opts.merge(:forum_api_key  => key)
+      response = self.class.post('/update_thread', :query => opts.merge(:forum_api_key  => key))
       response["succeeded"]
     end
   end
