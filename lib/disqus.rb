@@ -54,17 +54,14 @@ module Disqus
     s << '<script type="text/javascript" src="%s"></script>' % url
     s << '</div>'
     return s
-    
-    <div id="disqus_thread"></div><script type="text/javascript" src="http://disqus.com/forums/seatofanxiety/embed.js"></script><noscript><a href="http://seatofanxiety.disqus.com/?url=ref">View the discussion thread.</a></noscript><a href="http://disqus.com" class="dsq-brlink">blog comments powered by <span class="logo-disqus">Disqus</span></a>
   end  
   
-# Author,
-  [Forum, Post, Thread].each do |klass|
+  [Author, Forum, Post, Thread].each do |klass|
     klass.class_eval "include HTTParty"
     klass.class_eval "base_uri 'http://disqus.com/api'"
     klass.class_eval "format :json"
     klass.class_eval "default_params :user_api_key => '#{self.defaults[:api_key]}'"
-    # klass.class_eval "default_params :forum_api_key => '#{self.defaults[:forum_api_key]}'"
-    # klass.class_eval "default_params :forum_id => '#{self.defaults[:forum_id]}'"
+    klass.class_eval "default_params :forum_api_key => '#{self.defaults[:forum_api_key]}'"
+    klass.class_eval "default_params :forum_id => '#{self.defaults[:forum_id]}'"
   end
 end
