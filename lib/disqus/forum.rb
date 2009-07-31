@@ -28,7 +28,7 @@ module Disqus
     def threads
       response = self.class.get('/get_thread_list', :query => { 
         :forum_api_key => key, 
-        :forum_id => forum_id 
+        :forum_id => id 
       })
       response["succeeded"] ? response["message"].map { |data| Disqus::Thread.new(data) } : nil
     end

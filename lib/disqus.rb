@@ -48,6 +48,8 @@ module Disqus
     klass.class_eval "base_uri 'http://disqus.com/api'"
     klass.class_eval "format :json"
     klass.class_eval "default_params :user_api_key => '#{self.defaults[:api_key]}'"
+    # klass.class_eval "default_params :forum_api_key => '#{self.defaults[:forum_api_key]}'"
+    # klass.class_eval "default_params :forum_id => '#{self.defaults[:forum_id]}'"
   end
 
 end
