@@ -42,6 +42,22 @@ module Disqus
   def self.defaults
     @config = @defaults.merge(YAML::load(File.open("#{RAILS_ROOT}/config/disqus.yml")))
   end 
+  
+  # Widget to includes a comment form suitable for use with the Disqus
+  # API. This is different from the other widgets in that you can specify
+  # the thread identifier being commented on.
+  def self.comment_form(forum_shortname, thread_identifier)
+    url = 'http://disqus.com/api/reply.js?' + 
+      "forum_shortname=#{URI::encode(forum_shortname, /[^a-z0-9]/i)}&" + 
+      "thread_identifier=#{URI::encode(thread_identifier, /[^a-z0-9]/i)}"
+    s = '<div id="dsq-reply">'
+    s << '<script type="text/javascript" src="%s"></script>' % url
+    s << '</div>'
+    return s
+    
+    <div id="disqus_thread"></div><script type="text/javascript" src="http://disqus.com/forums/seatofanxiety/embed.js"></script><noscript><a href="http://seatofanxiety.disqus.com/?url=ref">View the discussion thread.</a></noscript><a href="http://disqus.com" class="dsq-brlink">blog comments powered by <span class="logo-disqus">Disqus</span></a>
+  end  
+  
 # Author,
   [Forum, Post, Thread].each do |klass|
     klass.class_eval "include HTTParty"
@@ -51,5 +67,4 @@ module Disqus
     # klass.class_eval "default_params :forum_api_key => '#{self.defaults[:forum_api_key]}'"
     # klass.class_eval "default_params :forum_id => '#{self.defaults[:forum_id]}'"
   end
-
 end
