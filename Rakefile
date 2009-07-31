@@ -1,6 +1,3 @@
-# require 'newgem'
-# require 'lib/disqus/version'
-
 begin
   require 'jeweler'
   Jeweler::Tasks.new do |gemspec|
