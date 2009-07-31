@@ -26,8 +26,11 @@ module ActiveRecord #:nodoc:
 
       module InstanceMethods
         def thread
-          'huzzah'
-          #Disqus::Thread.find_or_create(title, slug)
+          Disqus::Thread.find_or_create(title, slug)
+        end
+        
+        def comments
+          Disqus::Thread.find_or_create(title, slug).posts
         end
       end      
     end
