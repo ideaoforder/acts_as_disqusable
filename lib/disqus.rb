@@ -17,9 +17,10 @@
 require 'rubygems'
 require 'httparty'
 
-require 'disqus/forum'
-require 'disqus/thread'
-require 'disqus/post'
+require 'acts_as_disqusable/forum'
+require 'acts_as_disqusable/thread'
+require 'acts_as_disqusable/post'
+require 'acts_as_disqusable/author'
 
 module Disqus
   @defaults = {
