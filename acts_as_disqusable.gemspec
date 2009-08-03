@@ -2,11 +2,11 @@
 
 Gem::Specification.new do |s|
   s.name = %q{acts_as_disqusable}
-  s.version = "0.1.1"
+  s.version = "0.2.0"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Mark Dickson", "Thomas Reynolds", "Norman Clarke", "Matthew Van Horn"]
-  s.date = %q{2009-07-31}
+  s.date = %q{2009-08-03}
   s.description = %q{Uses the Disqus API to make model(s) comment-on-able}
   s.email = %q{mark@sitesteaders.com}
   s.extra_rdoc_files = [

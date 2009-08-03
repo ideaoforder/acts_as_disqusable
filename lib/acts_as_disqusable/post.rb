@@ -13,6 +13,10 @@ module Disqus
       end
     end
     
+    def linked_author(opts={})
+      "<a href=\"#{author['url']}\" target=\"#{opts[:target]}\" class=\"#{opts[:class]}\">#{self.author_name}</a>"
+    end
+    
     def self.create(opts={})
       response = self.class.post('/create_post', :query => opts)
       if response["success"]
