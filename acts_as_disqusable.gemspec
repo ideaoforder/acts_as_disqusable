@@ -2,7 +2,7 @@
 
 Gem::Specification.new do |s|
   s.name = %q{acts_as_disqusable}
-  s.version = "0.2.0"
+  s.version = "0.3.2"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Mark Dickson", "Thomas Reynolds", "Norman Clarke", "Matthew Van Horn"]
@@ -25,8 +25,6 @@ Gem::Specification.new do |s|
      "lib/acts_as_disqusable/forum.rb",
      "lib/acts_as_disqusable/post.rb",
      "lib/acts_as_disqusable/thread.rb",
-     "lib/acts_as_disqusable/view_helpers.rb",
-     "lib/acts_as_disqusable/widget.rb",
      "lib/disqus.rb",
      "tasks/rcov.rake",
      "test/api_test.rb",

@@ -21,7 +21,6 @@ require 'acts_as_disqusable/forum'
 require 'acts_as_disqusable/thread'
 require 'acts_as_disqusable/post'
 require 'acts_as_disqusable/author'
-require 'acts_as_disqusable/widget'
  
 module Disqus
   @defaults = {
@@ -31,13 +30,7 @@ module Disqus
     :api_version => '1.1',
     :container_id => 'disqus_thread',
     :avatar_size => 48,
-    :color => "grey",
-    :default_tab => "popular",
-    :hide_avatars => false,
-    :hide_mods => true,
     :num_items => 5,
-    :show_powered_by => false,
-    :orientation => "horizontal",
     :forum_api_key => '', # optional--if you're just mapping one forum to your app, this is convenient
     :forum_shortname => '', # ditto
     :forum_id => '' # ditto

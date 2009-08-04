@@ -1,11 +1,12 @@
-== Disqus Ruby Gem
+== Acts-As-Disqusable Ruby Gem
 
-The Disqus Gem helps you easily integrate the {Disqus}[http://disqus.com]
-commenting system into your website. It works for any site programmed in Ruby,
-and has view helpers for Rails and Merb.
+The Acts-As-Disqusable Gem helps you easily integrate the {Disqus}[http://disqus.com]
+commenting system into your website. It should work for any site programmed in Ruby.
 
-Support for the Disqus Javascript widgets is stable. Disqus API support is
-"beta."
+It's a fork of Norman Clarke's Disqus Gem and incorporates Thomas Reynolds's DisqusParty changes (namely, 
+switching to HTTParty and using Jeweler for gem creation, as well as ditching the view helpers). 
+
+Disqus API support is "beta." Right now we're using API version 1.1.
 
 === What is Disqus?
 
@@ -20,94 +21,103 @@ connecting websites and commenters across a thriving discussion community."
 
 === Get it
 
-  gem install disqus
-
-==== Bleeding Edge
-
-  gem install norman-disqus  --source http://gems.github.com
+  gem install ideaoforder-acts-as-disqusable
 
 === Use it:
 
+# easy!
+class YOUR_MODEL
+	acts_as_disqusable
+end
+
+# For multiple forums
+class YOUR_MODEL
+	acts_as_disqusable, :forum_id => X, :forum_shortname => X, :forum_api_key => X
+end
+
+# with nonstandard DB fields
+class YOUR_MODEL
+	# title, slug, and thread_id default to title, slug, and thread_id...surprise!
+	acts_as_disqusable, :title_column => 'name', 
+											:slug_column => 'permalink', 
+											:thread_id => 'your_mom',
+											:prefix => false # this defaults to the associated controller
+											# so Post would create a link like: '/posts/slug/
+											# you can set this to false for just: '/slug'
+											# or to a different path: '/blog/slug'
+end
+
+OPTIONAL:
+	You should create a :thread_id field in the database for each model
+	that is disqusable. This will result in fewer requests to Disqus.
+	Everything but YOUR_MODEL.comment_count() should work without it.
+
 ==== Configure it:
 
-===== Generic example:
-
-  Disqus::defaults[:account] = "my_disqus_account"
-  # Optional, only if you're using the API
-  Disqus::defaults[:api_key] = "my_disqus_api_key"
-
-===== Rails example:
-
-  # in config/development.rb (or production.rb, test.rb, etc.)
-  config.after_initialize do
-    Disqus::defaults[:account] = "my_disqus_account"
-    # Optional, only if you're using the API
-    Disqus::defaults[:api_key] = "my_disqus_api_key"
-  end
-
-Note that here the "after initialize" is necessary, otherwise your settings
-won't be set properly.
-
-===== Merb example:
-
-  # in config/init.rb
-  Merb::BootLoader.after_app_loads do
-    Disqus::defaults[:account] = "my_disqus_account"
-    # Optional, only if you're using the API
-    Disqus::defaults[:api_key] = "my_disqus_api_key"
-  end
-
-Note that here the "after_app_loads" is necessary, otherwise your settings
-won't be set properly.
+===== Example - This goes in config/disqus.yml:
+	:api_key: YOUR_API_KEY
+	:account: YOUR_ACCOUNT_NAME
+	:developer: true or false
+	
+	If you're only connecting 1 forum to your site:
+	
+	:forum_api_key: YOUR_FORUM_API_KEY
+	:forum_id: YOUR_FORUM_ID
+	:forum_shortname: YOUR_FORUM_SHORTNAME
+	
+	Otherwise, the forum info goes in the model that's disqusable.
+	You could use a different forum for each model.
+	It would be better to use the new category feature, however.
+	Sadly, I haven't had time to program that yet.
 
 ===== Options
 
   :api_key => "" # your api key
   :account => "", # your disqus account
-  :developer => false, # allows for threads to work on localhost
+  :developer => false, # allows for threads to work on localhost if set to true
   :container_id => 'disqus_thread', # desired thread container
   :avatar_size => 48, # squared pixel size of avatars
-  :color => "grey", # theme color
-  :default_tab => "popular", # default widget tab
-  :hide_avatars => false, # hide or show avatars
-  :hide_mods => true, # hide or show moderation
-  :num_items => 15, # number of comments to display
-  :show_powered_by => true, # show or hide powered by line
-  :orientation => "horizontal" # comment orientation
+  :num_items => 5, # number of comments to display / this is just the default
+	:forum_api_key => "" # your forum api key
+	:forum_id => "" # your forum id
+	:forum_shortname => "" # your forum shortname
 
-==== Show the comment threads widget on a post page:
+==== To get your forum info, in the console:
 
-  # Loads the commenting system
-  disqus_thread
-  
-  # Or if you're not using Rails/Merb:
-  Disqus::Widget::thread
-  
-  # Sets the inner html to the comment count for any links on the page that
-  # have the anchor "disqus_thread". For example, "View Comments" below would
-  # be replaced by "1 comment" or "23 comments" etc.
-  # <a href="http://my.website/article-permalink#disqus_thread">View Comments</a>
-  # <a href="http://my.website/different-permalink#disqus_thread">View Comments</a>
-  disqus_comment_counts
-  
-  # Or if you're not using Rails/Merb:
-  Disqus::Widget::comment_counts
+f = Disqus::Forum.all
 
-==== Show the combo widget on a post page:
+# find your forum, let's say it's the first
 
-  disqus_combo(:color => "blue", :hide_mods => false, :num_items => 20)
-  
-  # Or for non-Rails/Merb:
-  Disqus::Widget::combo(:color => "blue", :hide_mods => false, :num_items => 20)
+f.first.id
+f.first.key
+f.first.shortname
 
-==== Show the comment count on a permalink:
+==== So:
 
-  link_to("Permalink", post_path(@post, :anchor => "disqus_thread"))
-  ...
-  disqus_comment_counts
-  
-  # Or for non-Rails/Merb:
-  Disqus::Widget::comment_counts
+	Let's say Post are disqusable.
+	
+	Then 
+	
+		Post.comments(:limit => 5, :exclude => 'spam') # class level
+		
+	Will grab the 5 most recent non-spam comments. The default
+	limit and exclude are 5 and 'spam'.
+	
+		@post.comments
+		
+	Will grab the comments for a post.
+	
+		@post.comment_count
+		
+  Will grab the number of comments for a given post.
+	
+		@post.comment_form
+		
+	Will create a comment form appropriate to the @post. This still uses the
+	older javascript form.
+
+==== There are lots of other options for Threads/Forums etc.
+
 
 ==== Work with the Disqus API:
 
@@ -118,20 +128,16 @@ the {Disqus developer info here}[http://disqus.com/docs/api/].
 
 Github repository: 
   
-  http://github.com/norman/disqus
-
-=== Submit bug reports:
-
-Please use our {Lighthouse}[http://randomba.lighthouseapp.com/projects/16065-disqus/].
+  http://github.com/ideaoforder/acts_as_disqusable/
 
 === Learn more about Disqus:
 
 {http://disqus.com}[http://disqus.com]
 
 === Thanks to the following contributors:
-
+* {Thomas Reynolds}[http://github.com/tdreyno] - DisqusParty Gem
+* {Norman Clarke}[http://github.com/norman] - Disqus Gem
 * {Matt Van Horn}[http://github.com/mattvanhorn] - Disqus API
-* {Quin Hoxie}[http://github.com/qhoxie] - Merb support
 
 === Legal Stuff
 
@@ -139,5 +145,5 @@ The Disqus Ruby gem was not created by, nor is officially supported by
 Disqus.com or Big Head Labs, Inc. Use it at your own risk and your own
 responsibility under the terms of the MIT License.
 
-Copyright (c) 2008 {Norman Clarke}[mailto:norman@randomba.org], released under
+Copyright (c) 2008 {Mark Dickson}[mailto:mark@sitesteaders.com], released under
 the MIT license

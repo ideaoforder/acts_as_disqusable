@@ -1,6 +1,6 @@
 module Disqus
   class Thread
-    attr_accessor :id, :forum, :slug, :title, :created_at, :allow_comments, :url, :identifier, :hidden
+    attr_accessor :id, :forum, :slug, :title, :created_at, :allow_comments, :url, :identifier, :hidden, :category
     def initialize(data)
       data.each { |k, v| send(:"#{k}=", v) }
     end
@@ -16,9 +16,17 @@ module Disqus
     end
 
     # Returns an array of posts belonging to this thread.
-    def posts
-      response = self.class.get('/get_thread_posts', :query => { :thread_id => id })
+    # limit — Number of entries that should be included in the response. Default is 25.
+    # start — Starting point for the query. Default is 0.
+    # filter — Type of entries that should be returned (new, spam or killed).
+    # exclude — Type of entries that should be excluded from the response (new, spam or killed).    
+    def self.posts(thread_id, opts={:exclude => 'spam'})
+      response = self.get('/get_thread_posts', :query => opts.merge(:thread_id => thread_id ))
       response["message"].map { |data| Disqus::Post.new(data) }
+    end
+    
+    def posts(opts={:exclude => 'spam'})
+      self.class.posts(self.id)
     end
     
     # Sets the provided values on the thread object.

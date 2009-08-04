@@ -1,6 +1,6 @@
 module Disqus
   class Post
-    attr_accessor :id, :forum, :thread, :created_at, :message, :parent_post, :shown, :is_anonymous, :anonymous_author, :author, :points
+    attr_accessor :id, :forum, :thread, :created_at, :message, :parent_post, :shown, :is_anonymous, :anonymous_author, :author, :points, :status, :has_been_moderated, :ip_address
     def initialize(data)
       data.each { |k, v| send(:"#{k}=", v) }
     end

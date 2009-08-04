@@ -1,7 +1,7 @@
 module Disqus
   class Forum
     
-    attr_accessor :id, :shortname, :name, :created_at
+    attr_accessor :id, :shortname, :name, :created_at, :description
     def initialize(data)
       data.each { |k, v| send(:"#{k}=", v) }
     end
@@ -101,18 +101,18 @@ module Disqus
     end
     
     def posts_count(thread_ids)
-      self.class.posts_count(thread_ids)
+      self.class.posts_count(thread_ids, self.key)
     end
 
     # Returns an array of posts belonging to this thread.
-    def self.posts(thread_ids, key)
-      response = self.get('/get_forum_posts', :query => { :forum_api_key  => key })
+    def self.posts(key, opts={:exclude => 'spam'})
+      response = self.get('/get_forum_posts', :query => opts.merge(:forum_api_key  => key ))
       out = Hash.new
       response["message"].map { |data| Disqus::Post.new(data) }
     end
     
-    def posts(thread_ids)
-      self.class.posts(thread_ids)
+    def posts(opts={:exclude => 'spam'})
+      self.class.posts(self.key)
     end
   end
 end
