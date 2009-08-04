@@ -18,6 +18,24 @@ module ActiveRecord #:nodoc:
 
           def thread_column
             @@configuration[:thread_column] || 'thread_id'
+          end          
+          
+          def title_column
+            @@configuration[:title_column] || 'title'
+          end
+          
+          def slug_column
+            @@configuration[:slug_column] || 'slug'
+          end
+          
+          def prefix
+            if @@configuration[:prefix].nil?
+              return self.to_s.downcase + '-'
+            elsif @@configuration[:prefix]
+              return @@configuration[:prefix] + '-'
+            else
+              return ''
+            end
           end
 
           def forum_id
@@ -26,6 +44,10 @@ module ActiveRecord #:nodoc:
           
           def forum_api_key
             @@configuration[:forum_api_key] || nil
+          end
+          
+          def forum_shortname
+            @@configuration[:forum_shortname] || nil
           end
           
           def threads
@@ -50,8 +72,12 @@ module ActiveRecord #:nodoc:
       end
 
       module InstanceMethods
+        def thread_identifier
+          self.class.prefix + self.send(self.class.slug_column)
+        end
+        
         def thread
-          Disqus::Thread.find_or_create(title, slug)
+          Disqus::Thread.find_or_create(self.send(self.class.title_column), self.thread_identifier)
         end     
         
         def comments
@@ -68,6 +94,18 @@ module ActiveRecord #:nodoc:
           else # two separate calls
             Disqus::Thread.find_or_create(title, slug).posts_count
           end
+        end
+
+        def comment_form
+          forum_shortname = self.class.forum_shortname
+          thread_indentifier = self.thread_identifier
+          url = 'http://disqus.com/api/reply.js?' +
+            "forum_shortname=#{URI::encode(forum_shortname, /[^a-z0-9]/i)}&" +
+            "thread_identifier=#{URI::encode(thread_identifier, /[^a-z0-9]/i)}"
+          s = '<div id="dsq-reply">'
+          s << '<script type="text/javascript" src="%s"></script>' % url
+          s << '</div>'
+          return s
         end
         
         private        

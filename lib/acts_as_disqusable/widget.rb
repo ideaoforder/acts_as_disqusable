@@ -23,6 +23,19 @@ module Disqus
     TOP = ROOT_PATH + 'top_commenters_widget.js?num_items=%d&avatar_size=%d&orientation=%s'
     class << self
       
+      # Widget to includes a comment form suitable for use with the Disqus
+      # API. This is different from the other widgets in that you can specify
+      # the thread identifier being commented on.
+      def comment_form(forum_shortname, thread_identifier)
+        url = 'http://disqus.com/api/reply.js?' +
+          "forum_shortname=#{URI::encode(forum_shortname, /[^a-z0-9]/i)}&" +
+          "thread_identifier=#{URI::encode(thread_identifier, /[^a-z0-9]/i)}"
+        s = '<div id="dsq-reply">'
+        s << '<script type="text/javascript" src="%s"></script>' % url
+        s << '</div>'
+        return s
+      end      
+      
       # Show the main Disqus thread widget.
       # Options:
       # * <tt>account:</tt> Your Discus account (required).
