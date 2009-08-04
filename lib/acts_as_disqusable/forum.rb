@@ -106,7 +106,7 @@ module Disqus
 
     # Returns an array of posts belonging to this thread.
     def self.posts(thread_ids, key)
-      response = self.get('/get_thread_posts', :query => { :thread_id => thread_ids, :forum_api_key  => key })
+      response = self.get('/get_forum_posts', :query => { :forum_api_key  => key })
       out = Hash.new
       response["message"].map { |data| Disqus::Post.new(data) }
     end

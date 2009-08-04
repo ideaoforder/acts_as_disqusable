@@ -59,13 +59,17 @@ module ActiveRecord #:nodoc:
           end
           
           def comment_count(ids={})
-            if !ids.is_a? Hash
-              c = "id IN (" + ids.join(',')+ ")"
+            if self.column_names.include? self.thread_column
+              if !ids.is_a? Hash
+                c = "id IN (" + ids.join(',')+ ")"
+              else
+                c = nil
+              end
+              thread_ids = Post.all(:conditions => c, :select => :thread_id).collect(&:thread_id).compact.join(',')
+              Disqus::Forum.posts_count(thread_ids, self.forum_api_key)
             else
-              c = nil
+              'This operation is not supported without a thread_column.'
             end
-            thread_ids = Post.all(:conditions => c, :select => :thread_id).collect(&:thread_id).compact.join(',')
-            Disqus::Forum.posts_count(thread_ids, self.forum_api_key)
           end
           
         end

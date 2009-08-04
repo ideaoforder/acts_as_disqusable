@@ -21,7 +21,6 @@ require 'acts_as_disqusable/forum'
 require 'acts_as_disqusable/thread'
 require 'acts_as_disqusable/post'
 require 'acts_as_disqusable/author'
-require 'acts_as_disqusable/view_helpers'
 require 'acts_as_disqusable/widget'
  
 module Disqus
@@ -29,6 +28,7 @@ module Disqus
     :api_key => "",
     :account => "",
     :developer => false,
+    :api_version => '1.1',
     :container_id => 'disqus_thread',
     :avatar_size => 48,
     :color => "grey",
@@ -54,5 +54,6 @@ module Disqus
     klass.class_eval "default_params :user_api_key => '#{self.defaults[:api_key]}'"
     klass.class_eval "default_params :forum_api_key => '#{self.defaults[:forum_api_key]}'"
     klass.class_eval "default_params :forum_id => '#{self.defaults[:forum_id]}'"
+    klass.class_eval "default_params :api_version => '#{self.defaults[:api_version]}'"
   end
 end
