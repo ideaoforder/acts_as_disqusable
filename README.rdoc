@@ -55,15 +55,15 @@ OPTIONAL:
 ==== Configure it:
 
 ===== Example - This goes in config/disqus.yml:
-	:api_key: YOUR_API_KEY
-	:account: YOUR_ACCOUNT_NAME
-	:developer: true or false
+	- :api_key: YOUR_API_KEY
+	- :account: YOUR_ACCOUNT_NAME
+	- :developer: true or false
 	
 	If you're only connecting 1 forum to your site:
 	
-	:forum_api_key: YOUR_FORUM_API_KEY
-	:forum_id: YOUR_FORUM_ID
-	:forum_shortname: YOUR_FORUM_SHORTNAME
+	- :forum_api_key: YOUR_FORUM_API_KEY
+	- :forum_id: YOUR_FORUM_ID
+	- :forum_shortname: YOUR_FORUM_SHORTNAME
 	
 	Otherwise, the forum info goes in the model that's disqusable.
 	You could use a different forum for each model.
