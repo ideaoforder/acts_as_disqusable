@@ -21,7 +21,7 @@ connecting websites and commenters across a thriving discussion community."
 
 === Get it
 
-  gem install ideaoforder-acts-as-disqusable
+  gem install ideaoforder-acts_as_disqusable
 
 === Use it:
 
