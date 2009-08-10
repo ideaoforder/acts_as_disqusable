@@ -62,16 +62,16 @@ connecting websites and commenters across a thriving discussion community."
 	:account: YOUR_ACCOUNT_NAME
 	:developer: true or false
 	
-	If you're only connecting 1 forum to your site:
+If you're only connecting 1 forum to your site:
 	
 	:forum_api_key: YOUR_FORUM_API_KEY
 	:forum_id: YOUR_FORUM_ID
 	:forum_shortname: YOUR_FORUM_SHORTNAME
 	
-	Otherwise, the forum info goes in the model that's disqusable.
-	You could use a different forum for each model.
-	It would be better to use the new category feature, however.
-	Sadly, I haven't had time to program that yet.
+Otherwise, the forum info goes in the model that's disqusable.
+You could use a different forum for each model.
+It would be better to use the new category feature, however.
+Sadly, I haven't had time to program that yet.
 
 ===== Options
 
@@ -81,8 +81,8 @@ connecting websites and commenters across a thriving discussion community."
   :container_id => 'disqus_thread', # desired thread container
   :avatar_size => 48, # squared pixel size of avatars
   :num_items => 5, # number of comments to display / this is just the default
-	:forum_api_key => "" # your forum api key
-	:forum_id => "" # your forum id
+	:forum_api_key => "", # your forum api key
+	:forum_id => "", # your forum id
 	:forum_shortname => "" # your forum shortname
 
 ==== To get your forum info, in the console:
