@@ -21,49 +21,52 @@ connecting websites and commenters across a thriving discussion community."
 
 === Get it
 
+  gem sources -a http://gems.github.com # if you haven't already added github
   gem install ideaoforder-acts_as_disqusable
 
 === Use it:
+====== in environment.rb
+  config.gem 'ideaoforder-acts_as_disqusable', :lib => 'acts_as_disqusable'
 
-# easy!
-class YOUR_MODEL
-	acts_as_disqusable
-end
+====== easy!
+  class YOUR_MODEL
+	  acts_as_disqusable
+  end
 
-# For multiple forums
-class YOUR_MODEL
-	acts_as_disqusable, :forum_id => X, :forum_shortname => X, :forum_api_key => X
-end
+====== For multiple forums
+  class YOUR_MODEL
+	  acts_as_disqusable, :forum_id => X, :forum_shortname => X, :forum_api_key => X
+  end
 
-# with nonstandard DB fields
-class YOUR_MODEL
-	# title, slug, and thread_id default to title, slug, and thread_id...surprise!
-	acts_as_disqusable, :title_column => 'name', 
-											:slug_column => 'permalink', 
-											:thread_id => 'your_mom',
-											:prefix => false # this defaults to the associated controller
-											# so Post would create a link like: '/posts/slug/
-											# you can set this to false for just: '/slug'
-											# or to a different path: '/blog/slug'
-end
+====== with nonstandard DB fields
+  class YOUR_MODEL
+	  # title, slug, and thread_id default to title, slug, and thread_id...surprise!
+	  acts_as_disqusable, :title_column => 'name', 
+	    :slug_column => 'permalink', 
+	    :thread_id => 'your_mom',
+	    :prefix => false # this defaults to the associated controller
+	    # so Post would create a link like: '/posts/slug/
+	    # you can set this to false for just: '/slug'
+	    # or to a different path: '/blog/slug'
+  end
 
-OPTIONAL:
-	You should create a :thread_id field in the database for each model
-	that is disqusable. This will result in fewer requests to Disqus.
-	Everything but YOUR_MODEL.comment_count() should work without it.
+===== OPTIONAL:
+	  You should create a :thread_id field in the database for each model
+	  that is disqusable. This will result in fewer requests to Disqus.
+	  Everything but YOUR_MODEL.comment_count() should work without it.
 
 ==== Configure it:
 
 ===== Example - This goes in config/disqus.yml:
-	- :api_key: YOUR_API_KEY
-	- :account: YOUR_ACCOUNT_NAME
-	- :developer: true or false
+	:api_key: YOUR_API_KEY
+	:account: YOUR_ACCOUNT_NAME
+	:developer: true or false
 	
 	If you're only connecting 1 forum to your site:
 	
-	- :forum_api_key: YOUR_FORUM_API_KEY
-	- :forum_id: YOUR_FORUM_ID
-	- :forum_shortname: YOUR_FORUM_SHORTNAME
+	:forum_api_key: YOUR_FORUM_API_KEY
+	:forum_id: YOUR_FORUM_ID
+	:forum_shortname: YOUR_FORUM_SHORTNAME
 	
 	Otherwise, the forum info goes in the model that's disqusable.
 	You could use a different forum for each model.
@@ -84,37 +87,36 @@ OPTIONAL:
 
 ==== To get your forum info, in the console:
 
-f = Disqus::Forum.all
+  f = Disqus::Forum.all
 
-# find your forum, let's say it's the first
+====== find your forum, let's say it's the first
 
-f.first.id
-f.first.key
-f.first.shortname
+  f.first.id
+  f.first.key
+  f.first.shortname
 
 ==== So:
 
-	Let's say Post are disqusable.
+Let's say Post are disqusable.
+
+Then 
 	
-	Then 
-	
-		Post.comments(:limit => 5, :exclude => 'spam') # class level
+	Post.comments(:limit => 5, :exclude => 'spam') # class level
 		
-	Will grab the 5 most recent non-spam comments. The default
-	limit and exclude are 5 and 'spam'.
+Will grab the 5 most recent non-spam comments. The default
+limit and exclude are 5 and 'spam'.
 	
-		@post.comments
+	@post.comments
 		
-	Will grab the comments for a post.
+Will grab the comments for a post.
 	
-		@post.comment_count
+	@post.comment_count
 		
-  Will grab the number of comments for a given post.
+Will grab the number of comments for a given post.
 	
-		@post.comment_form
-		
-	Will create a comment form appropriate to the @post. This still uses the
-	older javascript form.
+	@post.comment_form
+	
+Will create a comment form appropriate to the @post. This still uses the older javascript form.
 
 ==== There are lots of other options for Threads/Forums etc.
 
